@@ -5,15 +5,15 @@ namespace Board
     class ArrayPosition
     {
         //
-        // An integer containing the array line
-        public int Line { get; set; }
+        // An integer containing the array row
+        public int Row { get; set; }
         //
         // An integer containing the array column
         public int Column { get; set; }
 
-        public ArrayPosition(int line, int column)
+        public ArrayPosition(int row, int column)
         {
-            Line = line;
+            Row = row;
             Column = column;
         }
 
@@ -26,7 +26,7 @@ namespace Board
         public BoardPosition ToBoardPosition()
         {
             return new BoardPosition(
-                Math.Abs(Line - 8),
+                Math.Abs(Row - 8),
                 (char)(Column + (int)'a')
             );
         }
@@ -40,7 +40,7 @@ namespace Board
         //     [6, 7]
         public override string ToString()
         {
-            return $"[{Line}, {Column}]";
+            return $"[{Row}, {Column}]";
         }
     }
 }

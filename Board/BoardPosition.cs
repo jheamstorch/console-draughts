@@ -3,15 +3,15 @@
     class BoardPosition
     {
         //
-        // An integer containing the board line
-        public int Line { get; set; }
+        // An integer containing the board row
+        public int Row { get; set; }
         //
         // A char containing the board column
         public char Column { get; set; }
 
-        public BoardPosition(int line, char column)
+        public BoardPosition(int row, char column)
         {
-            Line = line;
+            Row = row;
             Column = column;
         }
 
@@ -25,7 +25,7 @@
         {
             return new ArrayPosition
             (
-                8 - Line,
+                8 - Row,
                 Column - 'a'
             );
         }
@@ -39,7 +39,7 @@
         //     h6
         public override string ToString()
         {
-            return $"{Column}{Line}";
+            return $"{Column}{Row}";
         }
     }
 }
