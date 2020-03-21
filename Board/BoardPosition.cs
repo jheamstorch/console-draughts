@@ -3,10 +3,10 @@
     class BoardPosition
     {
         //
-        // An integer containing the board row
+        // An integer containing the board row.
         public int Row { get; set; }
         //
-        // A char containing the board column
+        // A char containing the board column.
         public char Column { get; set; }
 
         public BoardPosition(int row, char column)
@@ -17,15 +17,19 @@
 
         //
         // Summary:
-        //     Convert the BoardPosition to its equivalent ArrayPosition
+        //     Convert the BoardPosition to its equivalent TwoDimensionsArrayPosition.
+        //
+        // Parameters:
+        //   numberArrayRows:
+        //     The total number of elements in the frist dimension ("row" dimension) of the array.
         //
         // Return:
-        //     An ArrayPosition containing the actual BoardPosition converted to an ArrayPosition
-        public ArrayPosition ToArrayPosition()
+        //     An TwoDimensionsArrayPosition containing the actual BoardPosition converted to an TwoDimensionsArrayPosition.
+        public TwoDimensionsArrayPosition ToArrayPosition(int numberArrayRows)
         {
-            return new ArrayPosition
+            return new TwoDimensionsArrayPosition
             (
-                8 - Row,
+                numberArrayRows - Row,
                 Column - 'a'
             );
         }
