@@ -55,13 +55,11 @@ namespace ConsoleDraughts
             WriteColumnLetters();
             //
             //   ╔══════════╗
-            Console.WriteLine
-            (
+            Console.WriteLine(
                 new string(' ', board.Height.ToString().Length)
                 + '╔'
                 + new string('═', board.Width)
-                + "╗"
-            );
+                + "╗");
             //
             // xx║----------║xx
             // x ║----------║ x
@@ -70,12 +68,10 @@ namespace ConsoleDraughts
                 //
                 // xx║
                 // Writes the left number and the '║'.
-                Console.Write
-                (
+                Console.Write(
                     FromArrayRowToBoardRow(arrRow, board.Height)
                     + new string(' ', board.Height.ToString().Length - FromArrayRowToBoardRow(arrRow, board.Height).ToString().Length)
-                    + '║'
-                );
+                    + '║');
                 //
                 // ----------
                 // Writes the pieces.
@@ -93,22 +89,18 @@ namespace ConsoleDraughts
                 //
                 // ║xx
                 // Writes the right number.
-                Console.WriteLine
-                (
+                Console.WriteLine(
                     '║'
                     + new string(' ', board.Height.ToString().Length - FromArrayRowToBoardRow(arrRow, board.Height).ToString().Length)
-                    + FromArrayRowToBoardRow(arrRow, board.Height)
-                );
+                    + FromArrayRowToBoardRow(arrRow, board.Height));
             }
             //
             //   ╚══════════╝
-            Console.WriteLine
-            (
+            Console.WriteLine(
                 new string(' ', board.Height.ToString().Length)
                 + '╚'
                 + new string('═', board.Width)
-                + '╝'
-            );
+                + '╝');
             //
             //    abcdefghij
             WriteColumnLetters();

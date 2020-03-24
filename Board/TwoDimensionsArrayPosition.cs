@@ -62,8 +62,7 @@
         {
             return new BoardPosition(
                 FromArrayRowToBoardRow(Row, numberBoardRows),
-                FromArrayColumnToBoardColumn(Column)
-            );
+                FromArrayColumnToBoardColumn(Column));
         }
 
         //
