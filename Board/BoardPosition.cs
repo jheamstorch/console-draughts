@@ -17,20 +17,44 @@
 
         //
         // Summary:
+        //   Converts the BoardPosition.Row to its equvalent array row.
+        //
+        // Parameters:
+        //   boardRow:
+        //     The BoardPosition.Row to be converted.
+        //
+        //   numberArrayRows:
+        //     The total number of elements in the frist dimension ("row" dimension) of the array.
+        //
+        // Returns:
+        //     The equivalent array row.
+        public static int FromBoardRowToArrayRow(int boardRow, int numberArrayRows)
+        {
+            return numberArrayRows - boardRow;
+        }
+
+        //
+        // Summary:
+        public static int FromBoardColumnToArrayColumn(char boardColumn)
+        {
+            return boardColumn - 'a';
+        }
+        //
+        // Summary:
         //     Convert the BoardPosition to its equivalent TwoDimensionsArrayPosition.
         //
         // Parameters:
         //   numberArrayRows:
         //     The total number of elements in the frist dimension ("row" dimension) of the array.
         //
-        // Return:
+        // Returns:
         //     An TwoDimensionsArrayPosition containing the actual BoardPosition converted to an TwoDimensionsArrayPosition.
         public TwoDimensionsArrayPosition ToArrayPosition(int numberArrayRows)
         {
             return new TwoDimensionsArrayPosition
             (
-                numberArrayRows - Row,
-                Column - 'a'
+                FromBoardRowToArrayRow(Row, numberArrayRows),
+                FromBoardColumnToArrayColumn(Column)
             );
         }
 
