@@ -1,5 +1,8 @@
 ﻿namespace Board
 {
+    //
+    // Summary:
+    //     Represents a position on a two dimensions array.
     class TwoDimensionsArrayPosition
     {
         //
@@ -9,6 +12,16 @@
         // An integer containing the array column.
         public int Column { get; set; }
 
+        //
+        // Summary:
+        //     Instanciates a TwoDimensionsArrayPosition with its row and column.
+        //
+        // Parameters:
+        //   row:
+        //     Position's row.
+        //
+        //   column:
+        //     Position's column.
         public TwoDimensionsArrayPosition(int row, int column)
         {
             Row = row;
@@ -17,11 +30,11 @@
 
         //
         // Summary:
-        //     Converts only the array line to its equivalent board row.
+        //     Converts only a integer (representing a array) row to its equivalent board row.
         //
         // Parameters:
         //   arrRow:
-        //     The array row to be converted.
+        //     The integer representing a array row to be converted.
         //
         //   numberBoardRows:
         //     The total number of rows in the board.
@@ -35,11 +48,11 @@
 
         //
         // Summary:
-        //     Converts only the array column to its equivalent board column.
+        //     Converts only a integer (representing a array column) to its equivalent board column.
         //
         // Parameters:
         //   arrColumn:
-        //     The array column to be converted.
+        //     The integer representing a array column to be converted.
         //
         // Returns:
         //     The array column's equivalent board column.
