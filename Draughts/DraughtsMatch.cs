@@ -179,13 +179,34 @@ namespace Draughts
                     }
                     else
                     {
-                        RedPieces.Remove(Board.TakePiece(new TwoDimensionsArrayPosition(originArrPos.Row - 1, originArrPos.Column + 1)));
+                        RedPieces.Remove(Board.TakePiece(piece2BCapPos));
                     }
                 }
 
                 // Take the origin from the board and place it in the target
                 Board.PlacePiece(Board.TakePiece(origin.BoardPosition), target);
+
+                // If the Red pawn or a White pawn is in its promotion area it'll be promoted
+                switch (Board.Pieces(target))
+                {
+                    case Pawn _ when Board.Pieces(target).Team == Team.Red && target.Row == 1:
+                    case Pawn _ when Board.Pieces(target).Team == Team.White && target.Row == 10:
+                        Promotion(Board.Pieces(target) as Pawn);
+                        break;
+                }
             }
+        }
+
+        //
+        // Summary:
+        //     Promotes the Pawn to a Dame.
+        //
+        // Parameters:
+        //   pawn:
+        //     The pawn to be promoted.
+        private void Promotion(Pawn pawn)
+        {
+            Board.PlacePiece(new Dame(pawn.BoardPosition, pawn.Board, pawn.Team), pawn.BoardPosition);
         }
 
         //
