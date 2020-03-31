@@ -113,6 +113,61 @@ namespace Draughts
 
         //
         // Summary:
+        //     Checks if there's more than 1 possible targets and, if so, the
+        //     player will select the target; otherwise the move will be made
+        //     automatically the move by the player.
+        //
+        // Parameters:
+        //   selectedPiece:
+        //     The piece already selected from which the attack will start.
+        //
+        // Returns:
+        //     The BoardPosition of the target.
+        //
+        // Exceptions:
+        //   T:Draughts.Exceptions.InvalidPositionException:
+        //     The position informed by the player is beyond the board limits
+        //     or the target is invalid.
+        public BoardPosition SelectTarget(Piece selectedPiece)
+        {
+            if (selectedPiece.TargetsCount() == 1)
+            {
+                bool[,] possibleTargets = selectedPiece.PossibleTargets();
+                for (int row = 0; row < Board.Height; row++)
+                {
+                    for (int column = 0; column < Board.Width; column++)
+                    {
+                        if (possibleTargets[row, column])
+                        {
+                            return new TwoDimensionsArrayPosition(row, column).ToBoardPosition(Board.Height);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                BoardPosition target = FromStringToBoardPosition(Console.ReadLine());
+
+                if (target.Row > Board.Height || (target.Column - 'a') >= Board.Width)
+                {
+                    throw new InvalidPositionException("The informed target's position is beyond the limits of the board.");
+                }
+                else if (!selectedPiece.PossibleTargets()[FromBoardRowToArrayRow(target.Row, Board.Height), FromBoardColumnToArrayColumn(target.Column)])
+                {
+                    throw new InvalidPositionException("The informed target is no avaliable for this piece.");
+                }
+
+                return new BoardPosition(target.Row, target.Column);
+            }
+
+            // This only exists because the error list was warning me about an
+            // alleged error that there was a chance that the method would not
+            // return anything.
+            return null;
+        }
+
+        //
+        // Summary:
         //     Make the move, this also includes catching a possible piece in the process.
         //
         // Parameters:
@@ -123,78 +178,68 @@ namespace Draughts
         //     The position of the final destination of the Piece origin.
         public void MakeMovement(Piece origin, BoardPosition target)
         {
-            if (target.Row > Board.Height || (target.Column - 'a') >= Board.Width)
-            {
-                throw new InvalidPositionException("The informed target's position is beyond the limits of the board.");
-            }
-            else if (!origin.PossibleTargets()[FromBoardRowToArrayRow(target.Row, Board.Height), FromBoardColumnToArrayColumn(target.Column)])
-            {
-                throw new InvalidPositionException("The informed target is no avaliable for this piece.");
-            }
-            else
-            {
-                TwoDimensionsArrayPosition originArrPos = origin.BoardPosition.ToArrayPosition(Board.Height);
-                TwoDimensionsArrayPosition targetArrPos = target.ToArrayPosition(Board.Height);
+            TwoDimensionsArrayPosition originArrPos = origin.BoardPosition.ToArrayPosition(Board.Height);
+            TwoDimensionsArrayPosition targetArrPos = target.ToArrayPosition(Board.Height);
 
-                // If the target results in a capture
-                if (Math.Abs(originArrPos.Row - targetArrPos.Row) == 2)
+            // If the target results in a capture
+            if (Math.Abs(originArrPos.Row - targetArrPos.Row) == 2)
+            {
+                // The 'P' represents a piece, not a Pawn itself or a Dame, and the 'E' an enemy piece.
+                //
+                // 4---1
+                // -E-E-
+                // --P--
+                // -E-E-
+                // 3---2
+
+                TwoDimensionsArrayPosition piece2BCapPos;
+                // Locate and set the position of the piece to be captured
+                if ((originArrPos.Column - targetArrPos.Column) == -2) // NE && SE
                 {
-                    // The 'P' represents a piece, not a Pawn itself or a Dame, and the 'E' an enemy piece.
-                    //
-                    // 4---1
-                    // -E-E-
-                    // --P--
-                    // -E-E-
-                    // 3---2
-
-                    TwoDimensionsArrayPosition piece2BCapPos;
-                    // Locate and set the position of the piece to be captured
-                    if ((originArrPos.Column - targetArrPos.Column) == -2) // NE && SE
+                    if ((originArrPos.Row - targetArrPos.Row) == 2) // NE (1)
                     {
-                        if ((originArrPos.Row - targetArrPos.Row) == 2) // NE (1)
-                        {
-                            piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row - 1, originArrPos.Column + 1);
-                        }
-                        else // SE (2)
-                        {
-                            piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row + 1, originArrPos.Column + 1);
-                        }
+                        piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row - 1, originArrPos.Column + 1);
                     }
-                    else // SW && NW
+                    else // SE (2)
                     {
-                        if ((originArrPos.Row - targetArrPos.Row) == -2) // SW (3)
-                        {
-                            piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row + 1, originArrPos.Column - 1);
-                        }
-                        else // NW (4)
-                        {
-                            piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row - 1, originArrPos.Column - 1);
-                        }
+                        piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row + 1, originArrPos.Column + 1);
                     }
-
-
-                    if (TurnPlayer == Team.Red)
+                }
+                else // SW && NW
+                {
+                    if ((originArrPos.Row - targetArrPos.Row) == -2) // SW (3)
                     {
-                        WhitePieces.Remove(Board.TakePiece(piece2BCapPos));
+                        piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row + 1, originArrPos.Column - 1);
                     }
-                    else
+                    else // NW (4)
                     {
-                        RedPieces.Remove(Board.TakePiece(piece2BCapPos));
+                        piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row - 1, originArrPos.Column - 1);
                     }
                 }
 
-                // Take the origin from the board and place it in the target
-                Board.PlacePiece(Board.TakePiece(origin.BoardPosition), target);
 
-                // If the Red pawn or a White pawn is in its promotion area it'll be promoted
-                switch (Board.Pieces(target))
+                if (TurnPlayer == Team.Red)
                 {
-                    case Pawn _ when Board.Pieces(target).Team == Team.Red && target.Row == 1:
-                    case Pawn _ when Board.Pieces(target).Team == Team.White && target.Row == 10:
-                        Promotion(Board.Pieces(target) as Pawn);
-                        break;
+                    WhitePieces.Remove(Board.TakePiece(piece2BCapPos));
+                }
+                else
+                {
+                    RedPieces.Remove(Board.TakePiece(piece2BCapPos));
                 }
             }
+
+            // Take the origin from the board and place it in the target
+            Board.PlacePiece(Board.TakePiece(origin.BoardPosition), target);
+
+            // If the Red pawn or a White pawn is in its promotion area it'll be promoted
+            switch (Board.Pieces(target))
+            {
+                case Pawn _ when Board.Pieces(target).Team == Team.Red && target.Row == 1:
+                case Pawn _ when Board.Pieces(target).Team == Team.White && target.Row == 10:
+                    Promotion(Board.Pieces(target) as Pawn);
+                    break;
+            }
+
         }
 
         //

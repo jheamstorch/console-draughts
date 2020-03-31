@@ -42,7 +42,7 @@ namespace ConsoleDraughts
                     Console.Write("Select a target: ");
                     try
                     {
-                        actualMatch.MakeMovement(selectedPiece, FromStringToBoardPosition(Console.ReadLine()));
+                        actualMatch.MakeMovement(selectedPiece, actualMatch.SelectTarget(selectedPiece));
                         actualMatch.PassTurn();
                     }
                     catch (FormatException e)
