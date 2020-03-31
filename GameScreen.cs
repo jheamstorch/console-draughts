@@ -41,7 +41,7 @@ namespace ConsoleDraughts
         // Parameters:
         //   team:
         //     The team to be writen.
-        private static void WriteTeam(Team team)
+        private static void WriteLineTeam(Team team)
         {
             if (team == Team.Red)
             {
@@ -49,6 +49,7 @@ namespace ConsoleDraughts
             }
 
             Console.Write(team);
+            Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Gray;
         }
@@ -70,7 +71,7 @@ namespace ConsoleDraughts
             Console.WriteLine();
             Console.WriteLine();
 
-            WriteBoard(match.Board);
+            WriteLineBoard(match.Board);
             Console.WriteLine();
 
             Console.Write("Press any key to continue...");
@@ -84,12 +85,11 @@ namespace ConsoleDraughts
         // Parameters:
         //   match:
         //     The departure from where the information will be analyzed.
-        public static void MatchReport(DraughtsMatch match)
+        public static void WriteLineMatchReport(DraughtsMatch match)
         {
             Console.WriteLine("Turn: " + match.Round);
             Console.Write("Waiting movement: ");
-            WriteTeam(match.TurnPlayer);
-            Console.WriteLine();
+            WriteLineTeam(match.TurnPlayer);
         }
 
         //
@@ -118,7 +118,7 @@ namespace ConsoleDraughts
         // Parameters:
         //   board:
         //     The board to be printed.
-        public static void WriteBoard(Board.Board board)
+        public static void WriteLineBoard(Board.Board board)
         {
             //
             // Output example with a 10x10 board:
@@ -203,7 +203,7 @@ namespace ConsoleDraughts
         //
         //   targets:
         //     An array marking the positions of the board to be highlighted.
-        public static void WriteBoard(Board.Board board, bool[,] targets)
+        public static void WriteLineBoard(Board.Board board, bool[,] targets)
         {
             //
             // Output example with a 10x10 board:

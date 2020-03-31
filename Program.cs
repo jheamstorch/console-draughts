@@ -16,10 +16,11 @@ namespace ConsoleDraughts
             do
             {
                 Console.Clear();
-                GameScreen.WriteBoard(actualMatch.Board);
+                GameScreen.WriteLineBoard(actualMatch.Board);
                 Console.WriteLine();
 
-                GameScreen.MatchReport(actualMatch);
+                GameScreen.WriteLineMatchReport(actualMatch);
+                Console.WriteLine();
 
                 Console.Write("Select piece: ");
                 try
@@ -28,10 +29,11 @@ namespace ConsoleDraughts
 
                 TryMovementAgain:
                     Console.Clear();
-                    GameScreen.WriteBoard(actualMatch.Board, selectedPiece.PossibleTargets());
+                    GameScreen.WriteLineBoard(actualMatch.Board, selectedPiece.PossibleTargets());
                     Console.WriteLine();
 
-                    GameScreen.MatchReport(actualMatch);
+                    GameScreen.WriteLineMatchReport(actualMatch);
+                    Console.WriteLine();
 
                     Console.Write("Selected piece: ");
                     GameScreen.WritePiece(selectedPiece);
