@@ -12,8 +12,6 @@ namespace ConsoleDraughts
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
-
-            //GameScreen.ShowError("OIOIOIOII", "AIAIAIA");
             
             var actualMatch = new DraughtsMatch();
             GameScreen.HomeScreen(actualMatch);

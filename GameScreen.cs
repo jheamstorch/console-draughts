@@ -340,7 +340,6 @@ namespace ConsoleDraughts
                 Console.SetCursorPosition(squareColumnS, squareRowS + row);
                 Console.Write(new string(' ', squareColumnE - squareColumnS));
             }
-            Console.BackgroundColor = ConsoleColor.Black;
 
             // Indicates the smallest column of the console window avaliable to write and the its limit.
             // The 'S' means Start and the 'E' means End.
@@ -360,6 +359,8 @@ namespace ConsoleDraughts
 
             WriteString(writableColumnS, writableRowS + 6, "Press any key to continue...");
             Console.ReadKey(true);
+
+            Console.BackgroundColor = ConsoleColor.Black;
         }
     }
 }
