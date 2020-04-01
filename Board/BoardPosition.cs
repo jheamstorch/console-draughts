@@ -43,7 +43,7 @@
         //     If the string does not represent a BoardPosition.
         public static BoardPosition FromStringToBoardPosition(string str)
         {
-            string exceptionMessage = $"Your input \"{str}\" does not represent a BoardPosition.";
+            string exceptionMessage = $"Your input does not represent a BoardPosition.";
             if (str.Length > 3 || str.Length < 2)
             {
                 throw new System.FormatException(exceptionMessage);

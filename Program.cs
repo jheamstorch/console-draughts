@@ -10,6 +10,11 @@ namespace ConsoleDraughts
     {
         static void Main()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            //GameScreen.ShowError("OIOIOIOII", "AIAIAIA");
+            
             var actualMatch = new DraughtsMatch();
             GameScreen.HomeScreen(actualMatch);
 
@@ -47,46 +52,22 @@ namespace ConsoleDraughts
                     }
                     catch (FormatException e)
                     {
-                        Console.Clear();
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine("Please, follow the next example: e4");
-                        Console.WriteLine();
-
-                        Console.Write("Press any key to continue...");
-                        Console.ReadKey(true);
+                        GameScreen.WriteError(e.Message, "Try to follow the next example: e4");
                         goto TryMovementAgain;
                     }
                     catch (InvalidPositionException e)
                     {
-                        Console.Clear();
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine("Please, select a valid target.");
-                        Console.WriteLine();
-
-                        Console.Write("Press any key to continue...");
-                        Console.ReadKey(true);
+                        GameScreen.WriteError(e.Message, "Select a position with white highlight.");
                         goto TryMovementAgain;
                     }
                 }
                 catch (FormatException e)
                 {
-                    Console.Clear();
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine("Please, follow the next example: e4");
-                    Console.WriteLine();
-
-                    Console.Write("Press any key to continue...");
-                    Console.ReadKey(true);
+                    GameScreen.WriteError(e.Message, "Try to follow the next example: e4");
                 }
                 catch (InvalidPositionException e)
                 {
-                    Console.Clear();
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine("Please, select a valid piece.");
-                    Console.WriteLine();
-
-                    Console.Write("Press any key to continue...");
-                    Console.ReadKey(true);
+                    GameScreen.WriteError(e.Message, "Please, select a valid piece.");
                 }
             } while (!actualMatch.IsFinished());
         }

@@ -285,12 +285,81 @@ namespace ConsoleDraughts
             WriteColumnLetters(board);
         }
 
-        /*//
-        // Summary:
         //
-        public static void ShowError()
+        // Summary:
+        //     Write a text in the style of an error; using red to highlight
+        //     the information.
+        //
+        // Parameters:
+        //   errorMessage:
+        //     The message of the error.
+        //
+        //   errorTip:
+        //     A tip about the error and how to avoid it.
+        public static void WriteError(string errorMessage, string errorTip)
         {
+            //
+            // Summary:
+            //     Writes a string as a Console.Write(), but this method can
+            //     write a string anywhere in the console buffer.
+            //
+            // Parameters:
+            //   leftCursorPos:
+            //     The column to start with.
+            //   
+            //   topCursorPos:
+            //     The line you are going to write on.
+            //
+            //   str:
+            //     The string to be writed.
+            static void WriteString(int leftCursorPos, int topCursorPos, string str)
+            {
+                Console.SetCursorPosition(leftCursorPos, topCursorPos);
+                Console.Write(str);
+            }
 
-        }*/
+            string header = "* * Oops! An error has occurred * *";
+
+            // The 'S' means Start and the 'E' means End.
+            int squareColumnS = (int)Math.Ceiling((double)((Console.WindowWidth - Math.Max(errorMessage.Length, header.Length) - 2) / 2));
+            int squareColumnE = squareColumnS + Math.Max(errorMessage.Length, Math.Max(errorTip.Length, 35)) + 2;
+
+            // To ensure that the header will be centered
+            if (header.Length % 2 != (squareColumnE - squareColumnS) % 2)
+            {
+                squareColumnE++;
+            }
+
+            int squareRowS = (Console.WindowHeight - 7 - 2) / 2;
+            int squareRowE = squareRowS + 7 + 1;
+
+            // This generates the square of the error screen.
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            for (int row = 0; row <= squareRowE - squareRowS; row++)
+            {
+                Console.SetCursorPosition(squareColumnS, squareRowS + row);
+                Console.Write(new string(' ', squareColumnE - squareColumnS));
+            }
+            Console.BackgroundColor = ConsoleColor.Black;
+
+            // Indicates the smallest column of the console window avaliable to write and the its limit.
+            // The 'S' means Start and the 'E' means End.
+            int writableColumnS = squareColumnS + 1;
+            int writableColumnE = squareColumnE - 1;
+
+            // Indicates the smallest row of the console window avaliable to write.
+            // The 'S' means Start and the 'E' means End.
+            int writableRowS = squareRowS + 1;
+
+            // This writes the header in the center of the error square.
+            WriteString(((writableColumnE - writableColumnS - header.Length) / 2) + writableColumnS, writableRowS, header);
+            
+            WriteString(writableColumnS, writableRowS + 2, errorMessage);
+            WriteString(writableColumnS, writableRowS + 3, errorTip);
+
+
+            WriteString(writableColumnS, writableRowS + 6, "Press any key to continue...");
+            Console.ReadKey(true);
+        }
     }
 }
