@@ -25,7 +25,7 @@ namespace ConsoleDraughts
                 GameScreen.WriteLineMatchReport(actualMatch);
                 Console.WriteLine();
 
-                Console.Write("Select piece: ");
+                Console.Write("Select a piece: ");
                 try
                 {
                     Piece selectedPiece = actualMatch.SelectPiece(FromStringToBoardPosition(Console.ReadLine()));
