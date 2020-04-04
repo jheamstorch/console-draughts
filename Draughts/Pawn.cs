@@ -36,28 +36,39 @@ namespace Draughts
         public override bool[,] PossibleTargets()
         {
             // Red team
-            // ---
-            // -P-
-            // 2-1
+            // 4---1
+            // -----
+            // --P--
+            // -3-2-
             //
             // White team
-            // 2-1
-            // -P-
-            // ---
+            // -4-1-
+            // --P--
+            // -----
+            // 3---2
 
             bool[,] possibleTargets = new bool[Board.Height, Board.Width];
             TwoDimensionsArrayPosition arrPos = BoardPosition.ToArrayPosition(Board.Height);
 
-            if (Team == Team.Red)
+            if (Team == Team.Red) // Red pawn movement
             {
-                // SE (1)
+                // NE (1) (Only captures avaliable)
+                if ((arrPos.Row - 2) >= 0 && (arrPos.Column + 2) < Board.Width && Board.Pieces(arrPos.Row - 1, arrPos.Column + 1) != null && Board.Pieces(arrPos.Row - 1, arrPos.Column + 1).Team != Team)
+                {
+                    if (Board.Pieces(arrPos.Row - 2, arrPos.Column + 2) == null)
+                    {
+                        possibleTargets[arrPos.Row - 2, arrPos.Column + 2] = true;
+                    }
+                }
+
+                // SE (2)
                 if ((arrPos.Row + 1) < Board.Height && (arrPos.Column + 1) < Board.Width)
                 {
                     if (Board.Pieces(arrPos.Row + 1, arrPos.Column + 1) == null)
                     {
                         possibleTargets[arrPos.Row + 1, arrPos.Column + 1] = true;
                     }
-                    else if (Board.Pieces(arrPos.Row + 1, arrPos.Column + 1).Team != Team)
+                    else if (Board.Pieces(arrPos.Row + 1, arrPos.Column + 1).Team != Team) // Try to catch
                     {
                         if ((arrPos.Row + 2) < Board.Height && (arrPos.Column + 2) < Board.Width && Board.Pieces(arrPos.Row + 2, arrPos.Column + 2) == null)
                         {
@@ -66,14 +77,14 @@ namespace Draughts
                     }
                 }
 
-                // SW (2)
+                // SW (3)
                 if ((arrPos.Row + 1) < Board.Height && (arrPos.Column - 1) >= 0)
                 {
                     if (Board.Pieces(arrPos.Row + 1, arrPos.Column - 1) == null)
                     {
                         possibleTargets[arrPos.Row + 1, arrPos.Column - 1] = true;
                     }
-                    else if (Board.Pieces(arrPos.Row + 1, arrPos.Column - 1).Team != Team)
+                    else if (Board.Pieces(arrPos.Row + 1, arrPos.Column - 1).Team != Team) // Try to catch
                     {
                         if ((arrPos.Row + 2) < Board.Height && (arrPos.Column - 2) >= 0 && Board.Pieces(arrPos.Row + 2, arrPos.Column - 2) == null)
                         {
@@ -81,8 +92,17 @@ namespace Draughts
                         }
                     }
                 }
+
+                // NW (4) (Only captures avaliable)
+                if ((arrPos.Row - 2) >= 0 && (arrPos.Column - 2) >= 0 && Board.Pieces(arrPos.Row - 1, arrPos.Column - 1) != null && Board.Pieces(arrPos.Row - 1, arrPos.Column - 1).Team != Team)
+                {
+                    if (Board.Pieces(arrPos.Row - 2, arrPos.Column - 2) == null)
+                    {
+                        possibleTargets[arrPos.Row - 2, arrPos.Column - 2] = true;
+                    }
+                }
             }
-            else
+            else // White pawn movement
             {
                 // NE (1)
                 if ((arrPos.Row - 1) >= 0 && (arrPos.Column + 1) < Board.Width)
@@ -91,7 +111,7 @@ namespace Draughts
                     {
                         possibleTargets[arrPos.Row - 1, arrPos.Column + 1] = true;
                     }
-                    else if (Board.Pieces(arrPos.Row - 1, arrPos.Column + 1).Team != Team)
+                    else if (Board.Pieces(arrPos.Row - 1, arrPos.Column + 1).Team != Team) // Try to catch
                     {
                         if (((arrPos.Row - 2) >= 0 && (arrPos.Column + 2) < Board.Width) && Board.Pieces(arrPos.Row - 2, arrPos.Column + 2) == null)
                         {
@@ -100,14 +120,32 @@ namespace Draughts
                     }
                 }
 
-                // NW (2)
+                // SE (2) (Only captures avaliable)
+                if ((arrPos.Row + 2) < Board.Height && (arrPos.Column + 2) < Board.Width && Board.Pieces(arrPos.Row + 1, arrPos.Column + 1) != null && Board.Pieces(arrPos.Row + 1, arrPos.Column + 1).Team != Team)
+                {
+                    if (Board.Pieces(arrPos.Row + 2, arrPos.Column + 2) == null)
+                    {
+                        possibleTargets[arrPos.Row + 2, arrPos.Column + 2] = true;
+                    }
+                }
+
+                // SW (3) (Only captures avaliable)
+                if ((arrPos.Row + 2) < Board.Height && (arrPos.Column - 2) >= 0 && Board.Pieces(arrPos.Row + 1, arrPos.Column - 1) != null && Board.Pieces(arrPos.Row + 1, arrPos.Column - 1).Team != Team)
+                {
+                    if (Board.Pieces(arrPos.Row + 2, arrPos.Column - 2) == null)
+                    {
+                        possibleTargets[arrPos.Row + 2, arrPos.Column - 2] = true;
+                    }
+                }
+
+                // NW (4)
                 if ((arrPos.Row - 1) >= 0 && (arrPos.Column - 1) >= 0)
                 {
                     if (Board.Pieces(arrPos.Row - 1, arrPos.Column - 1) == null)
                     {
                         possibleTargets[arrPos.Row - 1, arrPos.Column - 1] = true;
                     }
-                    else if (Board.Pieces(arrPos.Row - 1, arrPos.Column - 1).Team != Team)
+                    else if (Board.Pieces(arrPos.Row - 1, arrPos.Column - 1).Team != Team) // Try to catch
                     {
                         if (((arrPos.Row - 2) >= 0 && (arrPos.Column - 2) >= 0) && Board.Pieces(arrPos.Row - 2, arrPos.Column - 2) == null)
                         {

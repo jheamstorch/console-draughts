@@ -68,6 +68,8 @@ namespace ConsoleDraughts
                     GameScreen.WriteError(e.Message, "Please, select a valid piece.");
                 }
             } while (!actualMatch.IsFinished());
+
+
         }
     }
 }
