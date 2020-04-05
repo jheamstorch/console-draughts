@@ -182,7 +182,7 @@ namespace Draughts
             TwoDimensionsArrayPosition targetArrPos = target.ToArrayPosition(Board.Height);
 
             // If the target results in a capture
-            if (Math.Abs(originArrPos.Row - targetArrPos.Row) == 2)
+            if (Math.Abs(originArrPos.Row - targetArrPos.Row) >= 2)
             {
                 // The 'P' represents a piece, not a Pawn itself or a Dame, and the 'E' an enemy piece.
                 //
@@ -194,26 +194,26 @@ namespace Draughts
 
                 TwoDimensionsArrayPosition piece2BCapPos;
                 // Locate and set the position of the piece to be captured
-                if ((originArrPos.Column - targetArrPos.Column) == -2) // NE && SE
+                if ((originArrPos.Column - targetArrPos.Column) <= -2) // NE && SE
                 {
-                    if ((originArrPos.Row - targetArrPos.Row) == 2) // NE (1)
+                    if ((originArrPos.Row - targetArrPos.Row) >= 2) // NE (1)
                     {
-                        piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row - 1, originArrPos.Column + 1);
+                        piece2BCapPos = new TwoDimensionsArrayPosition(targetArrPos.Row + 1, targetArrPos.Column - 1);
                     }
                     else // SE (2)
                     {
-                        piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row + 1, originArrPos.Column + 1);
+                        piece2BCapPos = new TwoDimensionsArrayPosition(targetArrPos.Row - 1, targetArrPos.Column - 1);
                     }
                 }
                 else // SW && NW
                 {
-                    if ((originArrPos.Row - targetArrPos.Row) == -2) // SW (3)
+                    if ((originArrPos.Row - targetArrPos.Row) <= -2) // SW (3)
                     {
-                        piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row + 1, originArrPos.Column - 1);
+                        piece2BCapPos = new TwoDimensionsArrayPosition(targetArrPos.Row - 1, targetArrPos.Column + 1);
                     }
                     else // NW (4)
                     {
-                        piece2BCapPos = new TwoDimensionsArrayPosition(originArrPos.Row - 1, originArrPos.Column - 1);
+                        piece2BCapPos = new TwoDimensionsArrayPosition(targetArrPos.Row + 1, targetArrPos.Column + 1);
                     }
                 }
 
