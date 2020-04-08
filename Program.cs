@@ -19,7 +19,7 @@ namespace ConsoleDraughts
             do
             {
                 Console.Clear();
-                GameScreen.WriteLineBoard(actualMatch.Board);
+                GameScreen.WriteLineBoard(actualMatch.Board, actualMatch.PossibleSelections());
                 Console.WriteLine();
 
                 GameScreen.WriteLineMatchReport(actualMatch);
@@ -28,11 +28,11 @@ namespace ConsoleDraughts
                 Console.Write("Select a piece: ");
                 try
                 {
-                    Piece selectedPiece = actualMatch.SelectPiece(FromStringToBoardPosition(Console.ReadLine()));
+                    Piece selectedPiece = actualMatch.SelectPiece();
 
                 TryMovementAgain:
                     Console.Clear();
-                    GameScreen.WriteLineBoard(actualMatch.Board, selectedPiece.PossibleTargets());
+                    GameScreen.WriteLineBoard(actualMatch.Board, selectedPiece.PossibleTargets(), selectedPiece);
                     Console.WriteLine();
 
                     GameScreen.WriteLineMatchReport(actualMatch);

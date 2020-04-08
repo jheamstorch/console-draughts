@@ -55,27 +55,6 @@ namespace Board
         //     An array of bool with the same size of the Board.Board._pieces marking ennemy pieces threatened or not by the current piece.
         public abstract bool[,] PossibleTargets();
 
-        //
-        // Summary:
-        //     Report the number of targets avaliable for this piece.
-        //
-        // Returns:
-        //     The number of targets avaliabe for this piece.
-        public int TargetsCount()
-        {
-            int counter = new int();
-
-            foreach (var target in PossibleTargets())
-            {
-                if (target)
-                {
-                    counter++;
-                }
-            }
-
-            return counter;
-        }
-
         public override string ToString()
         {
             return _symbol;

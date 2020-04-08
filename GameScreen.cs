@@ -251,7 +251,107 @@ namespace ConsoleDraughts
                 {
                     if (targets[arrRow, arrColumn])
                     {
-                        Console.BackgroundColor = ConsoleColor.DarkGray;
+                        Console.BackgroundColor = ConsoleColor.Blue;
+                    }
+
+                    if (board.Pieces(arrRow, arrColumn) == null)
+                    {
+                        Console.Write('-');
+                    }
+                    else
+                    {
+                        WritePiece(board.Pieces(arrRow, arrColumn));
+                    }
+
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
+                //
+                // ║xx
+                // Writes the right number.
+                Console.WriteLine(
+                    '║'
+                    + new string(' ', board.Height.ToString().Length - FromArrayRowToBoardRow(arrRow, board.Height).ToString().Length)
+                    + FromArrayRowToBoardRow(arrRow, board.Height));
+            }
+            //
+            //   ╚══════════╝
+            Console.WriteLine(
+                new string(' ', board.Height.ToString().Length)
+                + '╚'
+                + new string('═', board.Width)
+                + '╝');
+            //
+            //    abcdefghij
+            WriteColumnLetters(board);
+        }
+
+        //
+        // Summary:
+        //     Writes the board with row and column indicators, board limits, marking the targets and marking the actual selected piece.
+        //
+        // Parameters:
+        //   board:
+        //     The board to be printed.
+        //
+        //   targets:
+        //     An array marking the positions of the board to be highlighted.
+        //
+        //   selectedPiece:
+        //     A piece to be highlighted with dark yellow.
+        public static void WriteLineBoard(Board.Board board, bool[,] targets, Piece selectedPiece)
+        {
+            //
+            // Output example with a 10x10 board:
+            //    abcdefghij
+            //   ╔══════════╗
+            // 10║-P-P-P-P-P║10
+            // 9 ║P-P-P-P-P-║ 9
+            // 8 ║-P-P-P-P-P║ 8
+            // 7 ║P-P-P-P-P-║ 7
+            // 6 ║----------║ 6
+            // 5 ║----------║ 5
+            // 4 ║-P-P-P-P-P║ 4
+            // 3 ║P-P-P-P-P-║ 3
+            // 2 ║-P-P-P-P-P║ 2
+            // 1 ║P-P-P-P-P-║ 1
+            //   ╚══════════╝
+            //    abcdefghij
+
+            //
+            //    abcdefghij
+            WriteColumnLetters(board);
+            //
+            //   ╔══════════╗
+            Console.WriteLine(
+                new string(' ', board.Height.ToString().Length)
+                + '╔'
+                + new string('═', board.Width)
+                + "╗");
+            //
+            // xx║----------║xx
+            // x ║----------║ x
+            for (int arrRow = 0; arrRow < board.Height; arrRow++)
+            {
+                //
+                // xx║
+                // Writes the left number and the '║'.
+                Console.Write(
+                    FromArrayRowToBoardRow(arrRow, board.Height)
+                    + new string(' ', board.Height.ToString().Length - FromArrayRowToBoardRow(arrRow, board.Height).ToString().Length)
+                    + '║');
+                //
+                // ----------
+                // Writes the pieces.
+                for (int arrColumn = 0; arrColumn < board.Width; arrColumn++)
+                {
+                    if (board.Pieces(arrRow, arrColumn) == selectedPiece)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkYellow;
+                    }
+
+                    if (targets[arrRow, arrColumn])
+                    {
+                        Console.BackgroundColor = ConsoleColor.Blue;
                     }
 
                     if (board.Pieces(arrRow, arrColumn) == null)

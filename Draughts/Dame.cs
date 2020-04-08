@@ -35,19 +35,20 @@ namespace Draughts
         //     otherwise it contains false.
         public override bool[,] PossibleTargets()
         {
-            // 7-----1
-            // -7---1-
-            // --8-2--
+            // 4-----1
+            // -4---1-
+            // --8-5--
             // ---D---
-            // --6-4--
-            // -5---3-
-            // 5-----3
+            // --7-6--
+            // -3---2-
+            // 3-----2
 
             bool[,] possibleTargets = new bool[Board.Height, Board.Width];
             TwoDimensionsArrayPosition arrPos = BoardPosition.ToArrayPosition(Board.Height);
 
-            // NE (1) (Only catch avaliable)
             bool withoutCaptures = true;
+
+            // NE (1) (Only catch avaliable)
             for (int arrRow = arrPos.Row - 1, arrColumn = arrPos.Column + 1; arrRow >= 0 && arrColumn < Board.Width; arrRow--, arrColumn++)
             {
                 if (Board.Pieces(arrRow, arrColumn) != null)
@@ -64,14 +65,8 @@ namespace Draughts
                     }
                 }
             }
-            // NE (2) (Without catch case)
-            if (withoutCaptures && arrPos.Row - 1 >= 0 && arrPos.Column + 1 < Board.Width && Board.Pieces(arrPos.Row - 1, arrPos.Column + 1) == null)
-            {
-                possibleTargets[arrPos.Row - 1, arrPos.Column + 1] = true;
-            }
 
-            // SE (3) (Only catch avaliable)
-            withoutCaptures = true;
+            // SE (2) (Only catch avaliable)
             for (int arrRow = arrPos.Row + 1, arrColumn = arrPos.Column + 1; arrRow < Board.Height && arrColumn < Board.Width; arrRow++, arrColumn++)
             {
                 if (Board.Pieces(arrRow, arrColumn) != null)
@@ -88,14 +83,8 @@ namespace Draughts
                     }
                 }
             }
-            // SE (4) (Without catch case)
-            if (withoutCaptures && arrPos.Row + 1 < Board.Height && arrPos.Column + 1 < Board.Width && Board.Pieces(arrPos.Row + 1, arrPos.Column + 1) == null)
-            {
-                possibleTargets[arrPos.Row + 1, arrPos.Column + 1] = true;
-            }
 
-            // SW (5) (Only catch avaliable)
-            withoutCaptures = true;
+            // SW (3) (Only catch avaliable)
             for (int arrRow = arrPos.Row + 1, arrColumn = arrPos.Column - 1; arrRow < Board.Height && arrColumn >= 0; arrRow++, arrColumn--)
             {
                 if (Board.Pieces(arrRow, arrColumn) != null)
@@ -112,14 +101,8 @@ namespace Draughts
                     }
                 }
             }
-            // SW (6) (Without catch case)
-            if (withoutCaptures && arrPos.Row + 1 < Board.Height && arrPos.Column - 1 >= 0 && Board.Pieces(arrPos.Row + 1, arrPos.Column - 1) == null)
-            {
-                possibleTargets[arrPos.Row + 1, arrPos.Column - 1] = true;
-            }
 
-            // NW (7) (Only catch avaliable)
-            withoutCaptures = true;
+            // NW (4) (Only catch avaliable)
             for (int arrRow = arrPos.Row - 1, arrColumn = arrPos.Column - 1; arrRow >= 0 && arrColumn >= 0; arrRow--, arrColumn--)
             {
                 if (Board.Pieces(arrRow, arrColumn) != null)
@@ -136,10 +119,32 @@ namespace Draughts
                     }
                 }
             }
-            // SW (6) (Without catch case)
-            if (withoutCaptures && arrPos.Row - 1 >= 0 && arrPos.Column - 1 >= 0 && Board.Pieces(arrPos.Row - 1, arrPos.Column - 1) == null)
+
+            if (withoutCaptures)
             {
-                possibleTargets[arrPos.Row - 1, arrPos.Column - 1] = true;
+                // NE (5) (Without catch case)
+                if (arrPos.Row - 1 >= 0 && arrPos.Column + 1 < Board.Width && Board.Pieces(arrPos.Row - 1, arrPos.Column + 1) == null)
+                {
+                    possibleTargets[arrPos.Row - 1, arrPos.Column + 1] = true;
+                }
+
+                // SE (6) (Without catch case)
+                if (arrPos.Row + 1 < Board.Height && arrPos.Column + 1 < Board.Width && Board.Pieces(arrPos.Row + 1, arrPos.Column + 1) == null)
+                {
+                    possibleTargets[arrPos.Row + 1, arrPos.Column + 1] = true;
+                }
+
+                // SW (7) (Without catch case)
+                if (arrPos.Row + 1 < Board.Height && arrPos.Column - 1 >= 0 && Board.Pieces(arrPos.Row + 1, arrPos.Column - 1) == null)
+                {
+                    possibleTargets[arrPos.Row + 1, arrPos.Column - 1] = true;
+                }
+
+                // NW (8) (Without catch case)
+                if (arrPos.Row - 1 >= 0 && arrPos.Column - 1 >= 0 && Board.Pieces(arrPos.Row - 1, arrPos.Column - 1) == null)
+                {
+                    possibleTargets[arrPos.Row - 1, arrPos.Column - 1] = true;
+                }
             }
 
             return possibleTargets;

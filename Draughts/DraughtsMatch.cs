@@ -3,6 +3,7 @@ using System;
 using static Board.BoardPosition;
 using Board;
 using Draughts.Exceptions;
+using ConsoleDraughts;
 
 namespace Draughts
 {
@@ -72,6 +73,48 @@ namespace Draughts
         }
 
         //
+        // Summary;
+        //     Indicates all possible pieces to play in this turn.
+        //
+        // Returns:
+        //     An array of booleans that indicate all pieces avaliable to play
+        //     in this turn.
+        public bool[,] PossibleSelections()
+        {
+            bool[,] possibleSelections = new bool[Board.Height, Board.Width];
+
+            // Try to colect all pieces with movements that result in a capture.
+            foreach (var piece in (TurnPlayer == Team.Red) ? RedPieces : WhitePieces)
+            {
+                bool[,] possibleTargets = piece.PossibleTargets();
+                for (int row = 0; row < Board.Height; row++)
+                {
+                    for (int column = 0; column < Board.Width; column++)
+                    {
+                        if (possibleTargets[row, column] && Math.Abs(piece.BoardPosition.ToArrayPosition(Board.Height).Row - row) >= 2)
+                        {
+                            possibleSelections[piece.BoardPosition.ToArrayPosition(Board.Height).Row, piece.BoardPosition.ToArrayPosition(Board.Height).Column] = true;
+                        }
+                    }
+                }
+            }
+
+            // If there are no pieces with capture movements avaliable it adds pieces with at least one possible movement
+            if (possibleSelections.CountTrues() == 0)
+            {
+                foreach (var piece in (TurnPlayer == Team.Red) ? RedPieces : WhitePieces)
+                {
+                    if (piece.PossibleTargets().CountTrues() != 0)
+                    {
+                        possibleSelections[piece.BoardPosition.ToArrayPosition(Board.Height).Row, piece.BoardPosition.ToArrayPosition(Board.Height).Column] = true;
+                    }
+                }
+            }
+
+            return possibleSelections;
+        }
+
+        //
         // Summary:
         //     Select the piece to fight.
         // 
@@ -87,28 +130,44 @@ namespace Draughts
         //     It'll be throw when the player reports a position with no piece
         //     or when he tries to select an opposing piece or when he tries to
         //     select a piece with zero Piece.PossibleTargets().
-        public Piece SelectPiece(BoardPosition position)
+        public Piece SelectPiece()
         {
-            if (position.Row > Board.Height || (position.Column - 'a') >= Board.Width)
+            bool[,] possibleSelections = PossibleSelections();
+            if (possibleSelections.CountTrues() == 1)
             {
-                throw new InvalidPositionException("The informed position is beyond the limits of the board.");
-            }
-            else if (Board.Pieces(position) == null)
-            {
-                throw new InvalidPositionException("You cannot select a position without piece.");
-            }
-            else if (Board.Pieces(position).Team != TurnPlayer)
-            {
-                throw new InvalidPositionException("You cannot select an opposing piece.");
-            }
-            else if (Board.Pieces(position).TargetsCount() == 0)
-            {
-                throw new InvalidPositionException("You cannot select a piece without avaliable targets.");
+                for (int row = 0; row < Board.Height; row++)
+                {
+                    for (int column = 0; column < Board.Width; column++)
+                    {
+                        if (possibleSelections[row, column])
+                        {
+                            return Board.Pieces(row, column);
+                        }
+                    }
+                }
             }
             else
             {
-                return Board.Pieces(position);
+                BoardPosition position = FromStringToBoardPosition(Console.ReadLine());
+
+                if (position.Row > Board.Height || (position.Column - 'a') >= Board.Width)
+                {
+                    throw new InvalidPositionException("The informed position is beyond the limits of the board.");
+                }
+                else if (!possibleSelections[FromBoardRowToArrayRow(position.Row, Board.Height), FromBoardColumnToArrayColumn(position.Column)])
+                {
+                    throw new InvalidPositionException("The informed position isn't a valid selection");
+                }
+                else
+                {
+                    return Board.Pieces(position);
+                }
             }
+
+            // This only exists because the error list was warning me about an
+            // alleged error that there was a chance that the method would not
+            // return anything.
+            return null;
         }
 
         //
@@ -130,7 +189,7 @@ namespace Draughts
         //     or the target is invalid.
         public BoardPosition SelectTarget(Piece selectedPiece)
         {
-            if (selectedPiece.TargetsCount() == 1)
+            if (selectedPiece.PossibleTargets().CountTrues() == 1)
             {
                 bool[,] possibleTargets = selectedPiece.PossibleTargets();
                 for (int row = 0; row < Board.Height; row++)
@@ -226,10 +285,16 @@ namespace Draughts
                 {
                     RedPieces.Remove(Board.TakePiece(piece2BCapPos));
                 }
-            }
 
-            // Take the origin from the board and place it in the target
-            Board.PlacePiece(Board.TakePiece(origin.BoardPosition), target);
+                // Take the origin from the board and place it in the target
+                Board.PlacePiece(Board.TakePiece(origin.BoardPosition), target);
+                
+            }
+            else
+            {
+                // Take the origin from the board and place it in the target
+                Board.PlacePiece(Board.TakePiece(origin.BoardPosition), target);
+            }
 
             // If the Red pawn or a White pawn is in its promotion area it'll be promoted
             switch (Board.Pieces(target))
